@@ -1,0 +1,52 @@
+server:
+  port: 8800
+
+spring:
+  application:
+    name: api_gateway
+  cloud:
+    # nacos服务发现
+    nacos:
+      discovery:
+        server-addr: 192.168.1.186:8848  # 写的是我本地的nacos服务地址
+    # 负载均衡caffeine缓存配置
+    loadbalancer:
+      cache:
+        enabled: true
+        caffeine:
+          spec: initialCapacity=500,expireAfterWrite=5s
+    # 路由网关配置
+    gateway:
+      # 根据微服务名动态路由配置
+      routes:
+          # user_service服务路由
+        - id: user_route
+          uri: lb://user_service
+          predicates:
+            - Path=/api/accounts/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+          # item_service服务路由
+        - id: item_route
+          uri: lb://item_service
+          predicates:
+            - Path=/api/items/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+          # business_service服务路由
+        - id: business_route
+          uri: lb://business_service
+          predicates:
+            - Path=/api/           # ******根据controller具体设定路径条件
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+          # order_service服务路由
+        - id: order_route
+          uri: lb://order_service
+          predicates:
+            - Path=/api/order      # *******根据controller具体设定路径条件
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
