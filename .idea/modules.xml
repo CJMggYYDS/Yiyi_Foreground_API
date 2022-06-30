@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/API_Gateway/API_Gateway.iml" filepath="$PROJECT_DIR$/API_Gateway/API_Gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/auth_service/auth_service.iml" filepath="$PROJECT_DIR$/auth_service/auth_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/business_service/business_service.iml" filepath="$PROJECT_DIR$/business_service/business_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/item_service/item_service.iml" filepath="$PROJECT_DIR$/item_service/item_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/order_service/order_service.iml" filepath="$PROJECT_DIR$/order_service/order_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/user_service/user_service.iml" filepath="$PROJECT_DIR$/user_service/user_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yiyi_commons/yiyi_commons.iml" filepath="$PROJECT_DIR$/yiyi_commons/yiyi_commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yiyi_foreground.iml" filepath="$PROJECT_DIR$/yiyi_foreground.iml" />
+    </modules>
+  </component>
+</project>
