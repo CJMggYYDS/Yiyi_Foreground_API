@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: api_gateway
+    name: api-gateway
   cloud:
     # nacos服务发现
     nacos:
@@ -21,15 +21,15 @@ spring:
       routes:
           # user_service服务路由
         - id: user_route
-          uri: lb://user_service
+          uri: lb://user-service
           predicates:
-            - Path=/api/accounts/**
+            - Path=/api/users/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
           # item_service服务路由
         - id: item_route
-          uri: lb://item_service
+          uri: lb://item-service
           predicates:
             - Path=/api/items/**
           filters:
@@ -37,7 +37,7 @@ spring:
 
           # business_service服务路由
         - id: business_route
-          uri: lb://business_service
+          uri: lb://business-service
           predicates:
             - Path=/api/           # ******根据controller具体设定路径条件
           filters:
@@ -45,8 +45,16 @@ spring:
 
           # order_service服务路由
         - id: order_route
-          uri: lb://order_service
+          uri: lb://order-service
           predicates:
-            - Path=/api/order      # *******根据controller具体设定路径条件
+            - Path=/api/order/**      # *******根据controller具体设定路径条件
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+          # auth_service认证服务路由
+        - id: auth_route
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}

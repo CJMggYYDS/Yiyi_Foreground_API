@@ -3,10 +3,9 @@ package com.yiyi_app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@EnableResourceServer
 @SpringBootApplication
-public class UserApplication {
+public class AuthApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(AuthApplication.class, args);
     }
 }
