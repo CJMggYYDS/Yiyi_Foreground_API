@@ -1,5 +1,6 @@
 package com.yiyi_app.controller;
 
+import com.yiyi_app.entity.Item;
 import com.yiyi_app.entity.User;
 import com.yiyi_app.service.UserService;
 import com.yiyi_app.util.ResponseCodeEnum;
@@ -7,6 +8,8 @@ import com.yiyi_app.util.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -53,6 +56,22 @@ public class UserController {
     }
 
     /**
+     * 修改用户信息
+     * @author cjm
+     * @date: 2022/7/2
+     */
+    @PutMapping("/users/update")
+    public ResponseResult updateUserDetails(@RequestBody User user) {
+        boolean res=userService.updateUserDetails(user);
+        if(res) {
+            return ResponseResult.success();
+        }
+        else {
+            return ResponseResult.error();
+        }
+    }
+
+    /**
      * 检查用户名是否重复
      * @author cjm
      * @date: 2022/7/2
@@ -73,7 +92,49 @@ public class UserController {
      * 获取收藏夹物品
      * @author cjm
      * @date: 2022/7/2
-     * @param username
+     * @param userInfo
      */
+    @GetMapping("/users/favourite")
+    public ResponseResult getProfileItems(@RequestBody Map<String, String> userInfo) {
+        String uid=userInfo.get("uid");
+        List<Item> responseData=userService.getItemsFromProfile(uid);
+        return ResponseResult.success(responseData);
+    }
+
+    /**
+     * 将物品添加至收藏夹
+     * @author cjm
+     * @date: 2022/7/2
+     */
+    @PostMapping("/users/favourite")
+    public ResponseResult addItemToProfile(@RequestBody Map<String, String> info) {
+        String uid=info.get("uid");
+        String itemId=info.get("itemId");
+        boolean res=userService.addItemIntoProfile(uid, itemId);
+        if(res) {
+            return ResponseResult.success();
+        }
+        else {
+            return ResponseResult.error();
+        }
+    }
+
+    /**
+     * 将物品从收藏夹中移除
+     * @author cjm
+     * @date: 2022/7/2
+     */
+    @DeleteMapping("/users/favourite")
+    public ResponseResult removeItem(@RequestBody Map<String, String> info) {
+        String uid=info.get("uid");
+        String itemId=info.get("itemId");
+        boolean res=userService.removeItemFromProfile(uid, itemId);
+        if(res) {
+            return ResponseResult.success();
+        }
+        else {
+            return ResponseResult.error();
+        }
+    }
 
 }
