@@ -37,7 +37,7 @@ public class AuthTokenFilter implements GlobalFilter, Ordered {
         String uri = serverHttpRequest.getURI().getPath();
 
         System.out.println("路由网关拦截:" + uri);
-        //检查白名单, 直接放行,无需登录获取token校验
+        //检查白名单, 登录与注册请求直接放行,无需登录获取token校验
         if(uri.contains("/api/auth/token") || uri.contains("/api/users/register")) {
             return chain.filter(exchange);
         }
@@ -54,8 +54,18 @@ public class AuthTokenFilter implements GlobalFilter, Ordered {
         }catch (Exception e) {
             return getVoidMono(serverHttpResponse, ResponseCodeEnum.TOKEN_INVALID);
         }
-        //token校验通过，放行
-        return chain.filter(exchange);
+        //token校验通过,放行,并将uid放入请求头中
+        String uid=JWTUtil.getUIDfromToken(token);
+        ServerHttpRequest mutableRequest=serverHttpRequest
+                .mutate()
+                .header("uid", uid)
+                .build();
+
+        ServerWebExchange mutableExchange=exchange
+                .mutate()
+                .request(mutableRequest)
+                .build();
+        return chain.filter(mutableExchange);
     }
 
     private Mono<Void> getVoidMono(ServerHttpResponse response, ResponseCodeEnum codeEnum) {

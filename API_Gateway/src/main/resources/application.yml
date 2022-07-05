@@ -39,7 +39,7 @@ spring:
         - id: business_route
           uri: lb://business-service
           predicates:
-            - Path=/api/           # ******根据controller具体设定路径条件
+            - Path=/api/business/**           # ******根据controller具体设定路径条件
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
@@ -47,7 +47,7 @@ spring:
         - id: order_route
           uri: lb://order-service
           predicates:
-            - Path=/api/order/**      # *******根据controller具体设定路径条件
+            - Path=/api/orders/**      # *******根据controller具体设定路径条件
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 
