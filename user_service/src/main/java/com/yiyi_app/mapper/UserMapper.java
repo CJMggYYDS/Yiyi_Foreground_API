@@ -1,10 +1,7 @@
 package com.yiyi_app.mapper;
 
 import com.yiyi_app.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface UserMapper {
@@ -20,6 +17,6 @@ public interface UserMapper {
     int insertUser(User user);
 
     @Update("update yiyi_db_v2.user set address=#{user.address}, favoritesId=#{user.favoritesId} where username=#{user.username}")
-    int updateUser(User user);
+    int updateUser(@Param("user") User user);
 
 }

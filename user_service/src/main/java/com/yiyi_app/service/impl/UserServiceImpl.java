@@ -3,6 +3,7 @@ package com.yiyi_app.service.impl;
 import com.yiyi_app.entity.Item;
 import com.yiyi_app.entity.Profile;
 import com.yiyi_app.entity.User;
+import com.yiyi_app.mapper.LogMapper;
 import com.yiyi_app.mapper.ProfileMapper;
 import com.yiyi_app.mapper.UserMapper;
 import com.yiyi_app.service.UserService;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     ProfileMapper profileMapper;
+
+    @Resource
+    LogMapper log_Mapper;
 
     @Resource
     ItemClient itemClient;
@@ -62,12 +66,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Item> getItemsFromProfile(String uid) {
-        List<Profile> profiles=getProfiles(uid);
-        List<Item> items=new ArrayList<>();
-        profiles.forEach(profile -> {
-            Item item=itemClient.getItemByItemId(profile.getItemId());
-            items.add(item);
-        });
-        return items;
+        List<String> itemIds=profileMapper.getItemIdsByUID(uid);
+        return itemClient.getItemsByListId(itemIds);
+    }
+
+    @Override
+    public List<Item> getItemsFromLog(String uid) {
+        List<String> itemIds=log_Mapper.selectItemsFromLogByUId(uid, 1);
+        return itemClient.getItemsByListId(itemIds);
     }
 }

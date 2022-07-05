@@ -23,4 +23,6 @@ public interface UserService {
     Boolean removeItemFromProfile(String uid, String itemId);
 
     List<Item> getItemsFromProfile(String uid);
+
+    List<Item> getItemsFromLog(String uid);
 }

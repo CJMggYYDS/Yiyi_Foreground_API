@@ -2,6 +2,7 @@ package com.yiyi_app.controller;
 
 import com.yiyi_app.entity.Item;
 import com.yiyi_app.entity.User;
+import com.yiyi_app.service.LogService;
 import com.yiyi_app.service.UserService;
 import com.yiyi_app.util.ResponseCodeEnum;
 import com.yiyi_app.util.ResponseResult;
@@ -18,17 +19,24 @@ public class UserController {
     @Resource
     UserService userService;
 
+    @Resource
+    LogService logger;
+
     /**
      *  用户注册
      * @author cjm
      * @date: 2022/7/2
-     * @param user(username, password...)
+     * @param registerInfo
      */
     @PostMapping("/users/register")
-    public ResponseResult registerNewUser(@RequestBody User user) {
+    public ResponseResult registerNewUser(@RequestBody Map<String, String> registerInfo) {
         UUID uuid = UUID.randomUUID();
         String uid = uuid.toString();
+        User user=new User();
         user.setUid(uid);
+        user.setUsername(registerInfo.get("username"));
+        user.setPassword(registerInfo.get("password"));
+        user.setStatus(1);
         boolean res = userService.insertNewUser(user);
         if(res) {
             return ResponseResult.success();
@@ -92,11 +100,10 @@ public class UserController {
      * 获取收藏夹物品
      * @author cjm
      * @date: 2022/7/2
-     * @param userInfo
+     * @param uid
      */
-    @GetMapping("/users/favourite")
-    public ResponseResult getProfileItems(@RequestBody Map<String, String> userInfo) {
-        String uid=userInfo.get("uid");
+    @GetMapping("/users/favourite/{uid}")
+    public ResponseResult getProfileItems(@PathVariable("uid") String uid) {
         List<Item> responseData=userService.getItemsFromProfile(uid);
         return ResponseResult.success(responseData);
     }
@@ -112,6 +119,7 @@ public class UserController {
         String itemId=info.get("itemId");
         boolean res=userService.addItemIntoProfile(uid, itemId);
         if(res) {
+            logger.addProfileAction(uid, itemId);
             return ResponseResult.success();
         }
         else {
@@ -130,11 +138,23 @@ public class UserController {
         String itemId=info.get("itemId");
         boolean res=userService.removeItemFromProfile(uid, itemId);
         if(res) {
+            logger.removeProfileAction(uid, itemId);
             return ResponseResult.success();
         }
         else {
             return ResponseResult.error();
         }
+    }
+
+    /**
+     *  获得历史浏览记录
+     * @author cjm
+     * @date: 2022/7/5
+     */
+    @GetMapping("/users/history/{uid}")
+    public ResponseResult getLogItems(@PathVariable("uid") String uid) {
+        List<Item> responseData=userService.getItemsFromLog(uid);
+        return ResponseResult.success(responseData);
     }
 
 }
