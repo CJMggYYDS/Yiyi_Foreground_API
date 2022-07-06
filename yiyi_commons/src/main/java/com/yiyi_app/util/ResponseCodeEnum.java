@@ -13,7 +13,8 @@ public enum ResponseCodeEnum {
     PARAM_ERROR(1002, "请求参数错误"),
     TOKEN_MISSION(1003, "未携带token,没有权限"),
     TOKEN_INVALID(1004, "token校验错误"),
-    USER_EXISTED(1005, "用户名已存在");
+    USER_EXISTED(1005, "用户名已存在"),
+    RETURNITEM_ERROR(203,"归还商品失败，归还逾期，需要交费");
 
     private int code;
     private String msg;
