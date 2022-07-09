@@ -1,0 +1,20 @@
+server:
+  port: 8606
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://1.14.166.148/shareClothes
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  # nacos服务地址
+
+logging:
+  level:
+    com.yiyi_app.mapper: debug
+

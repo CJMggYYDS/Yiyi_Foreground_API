@@ -147,6 +147,18 @@ public class ItemController {
         return itemService.getItemsByIdList(itemIds);
     }
 
+
+    /**
+    * @param: itemId
+    * @description: 用于获取item远程调用的接口
+    * @author: egg
+    * @create: 2022/7/4
+    */
+    @PostMapping("/items/item")
+    public Item getItemsByItemId(@RequestBody String itemId) {
+        return itemService.getItemByItemId(itemId);
+    }
+
     /**
      * 用于远程调用的接口
      * @param itemTimes
