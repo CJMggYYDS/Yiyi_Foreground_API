@@ -8,7 +8,10 @@ spring:
     # nacos服务发现
     nacos:
       discovery:
-        server-addr: 192.168.1.186:8848  # 写的是我本地的nacos服务地址
+        server-addr: 1.14.166.148:8848
+    sentinel:
+      transport:
+        dashboard: 1.14.166.148:8858
     # 负载均衡caffeine缓存配置
     loadbalancer:
       cache:

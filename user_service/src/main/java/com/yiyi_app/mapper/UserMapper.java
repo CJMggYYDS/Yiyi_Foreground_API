@@ -6,17 +6,17 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserMapper {
 
-    @Select("select * from yiyi_db_v2.user where username = #{username}")
+    @Select("select * from shareclothes.user where username = #{username}")
     User getUserByUsername(String username);
 
-    @Select("select * from yiyi_db_v2.user where uid=#{uid}")
+    @Select("select * from shareclothes.user where uid=#{uid}")
     User getUserByUID(String uid);
 
-    @Insert("insert into yiyi_db_v2.user(uid, username, password, address, status, favoritesId) " +
+    @Insert("insert into shareclothes.user(uid, username, password, address, status, favoritesId) " +
             "VALUES (#{uid}, #{username}, #{password}, #{address}, #{status}, #{favoritesId})")
     int insertUser(User user);
 
-    @Update("update yiyi_db_v2.user set address=#{user.address}, favoritesId=#{user.favoritesId} where username=#{user.username}")
+    @Update("update shareclothes.user set address=#{user.address}, favoritesId=#{user.favoritesId} where username=#{user.username}")
     int updateUser(@Param("user") User user);
 
 }

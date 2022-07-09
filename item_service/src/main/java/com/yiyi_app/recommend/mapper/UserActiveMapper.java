@@ -16,13 +16,13 @@ import java.util.List;
 public interface UserActiveMapper {
 
     // 获得用户对某一商品操作的次数
-    @Select("select count(*) from yiyi_db_v2.log where uid=#{uid} and itemId=#{itemId}")
+    @Select("select count(*) from shareclothes.log where uid=#{uid} and itemId=#{itemId}")
     Long getHitsFromUserLog(@Param("uid") String uid, @Param("itemId") String itemId);
 
-    @Select("select uid from yiyi_db_v2.log group by uid")
+    @Select("select uid from shareclothes.log group by uid")
     List<String> getAllUidFromLog();
 
-    @Select("select uid, itemId, count(*) as hits from yiyi_db_v2.log group by uid,itemId")
+    @Select("select uid, itemId, count(*) as hits from shareclothes.log group by uid,itemId")
     List<UserActiveDTO> listAllUserActiveDTO();
 
 }

@@ -8,6 +8,10 @@ import com.yiyi_app.service.UserService;
 import com.yiyi_app.service.client.ItemClient;
 import com.yiyi_app.vo.ItemTimeVO;
 import com.yiyi_app.vo.ItemVO;
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "userInfo",key = "#user.uid")
     public Boolean updateUserDetails(User user) {
         return userMapper.updateUser(user) > 0; // >0表示更新成功
     }
@@ -44,26 +49,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "userInfo",key = "#uid")
     public User getUserByUID(String uid) {
         return userMapper.getUserByUID(uid);
     }
 
     @Override
+    @Cacheable(value = "profile",key = "'profile:'+#uid")
     public List<Profile> getProfiles(String uid) {
         return profileMapper.getProfileByUserId(uid);
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "profile",key="'profile:'+#uid"),
+                    @CacheEvict(value = "profileItems",key = "'profileItems:'+#uid")
+            }
+    )
     public Boolean addItemIntoProfile(String uid, String itemId) {
         return profileMapper.insertProfileByUserIdAndItemId(uid, itemId) > 0;
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "profile",key="'profile:'+#uid"),
+                    @CacheEvict(value = "profileItems",key = "'profileItems:'+#uid")
+            }
+    )
     public Boolean removeItemFromProfile(String uid, String itemId) {
         return profileMapper.deleteProfileByUserIdAndItemId(uid, itemId) > 0;
     }
 
     @Override
+    @Cacheable(value = "profileItems",key = "'profileItems:'+#uid")
     public List<ItemVO> getItemsFromProfile(String uid) {
         List<String> itemIds=profileMapper.getItemIdsByUID(uid);
         return itemClient.getItemsByListId(itemIds);

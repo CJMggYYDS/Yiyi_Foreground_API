@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper {
 
-    @Select("select * from yiyi_db_v2.category")
+    @Select("select * from shareclothes.category")
     List<Category> getAllCategoryClassify();
 
-    @Select("select * from yiyi_db_v2.category where classify=#{classify}")
+    @Select("select * from shareclothes.category where classify=#{classify}")
     Category getCategoryByClassify(String classify);
 }

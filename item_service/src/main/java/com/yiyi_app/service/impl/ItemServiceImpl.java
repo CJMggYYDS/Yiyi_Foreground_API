@@ -8,6 +8,7 @@ import com.yiyi_app.mapper.ItemMapper;
 import com.yiyi_app.service.ItemService;
 import com.yiyi_app.vo.ItemTimeVO;
 import com.yiyi_app.vo.ItemVO;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,11 +30,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value="categories", key="'allCategories'")
     public List<Category> getAllCategories() {
         return categoryMapper.getAllCategoryClassify();
     }
 
     @Override
+    @Cacheable(value = "itemVO", key = "'itemVO:'+#itemId")
     public ItemVO getItemVOByItemId(String itemId) {
         if(itemId!=null) {
             Item item=itemMapper.getItemByItemId(itemId);
@@ -44,16 +47,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value = "item",key = "'item:'+ #itemId")
     public Item getItemByItemId(String itemId) {
         return itemMapper.getItemByItemId(itemId);
     }
 
     @Override
+    @Cacheable(value = "ItemsClassify",key = "'classify:'+#classify")
     public List<Item> getItemsByClassify(String classify) {
         return itemMapper.getItemsByClassify(classify);
     }
 
     @Override
+    @Cacheable(value = "ItemsKeyword",key = "'search:'+#keyword")
     public List<Item> searchItemsByKeyword(String keyword) {
         return itemMapper.searchItemsByKeyword("%"+keyword.toLowerCase()+"%");
     }
@@ -69,6 +75,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Cacheable(value = "top10Items",key = "'itemsTop10'")
     public List<ItemVO> getTop10Items() {
         List<String> itemIds=itemMapper.getItemsSalesTop10();
         return getItemsByIdList(itemIds);

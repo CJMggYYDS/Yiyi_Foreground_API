@@ -9,18 +9,18 @@ import java.util.List;
 @Mapper
 public interface ItemMapper {
 
-    @Select("select * from yiyi_db_v2.item where itemid=#{itemId}")
+    @Select("select itemid,classify,itemName,price,description,url,inventory from shareclothes.item where itemid=#{itemId}")
     Item getItemByItemId(String itemId);
 
-    @Select("select * from yiyi_db_v2.item where classify=#{classify}")
+    @Select("select itemid,classify,itemName,price,description,url,inventory from shareclothes.item where classify=#{classify}")
     List<Item> getItemsByClassify(String classify);
 
-    @Select("select * from yiyi_db_v2.item where lower(itemName) like #{keyword}")
+    @Select("select itemid,classify,itemName,price,description,url,inventory from shareclothes.item where lower(itemName) like #{keyword}")
     List<Item> searchItemsByKeyword(String keyword);
 
-    @Select("select sales from yiyi_db_v2.itemsales where itemid=#{itemId}")
+    @Select("select sales from shareclothes.itemsales where itemid=#{itemId}")
     Integer getSalesByItemId(String itemId);
 
-    @Select("select itemId from yiyi_db_v2.itemsales order by sales desc limit 10")
+    @Select("select itemId from shareclothes.itemsales order by sales desc limit 10")
     List<String> getItemsSalesTop10();
 }

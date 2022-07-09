@@ -6,15 +6,17 @@ spring:
     name: auth-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yiyi_db_v2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
+    url: jdbc:mysql://1.14.166.148:3306/shareclothes?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT
     username: root
     password: 123456
   cloud:
     # nacos服务发现
     nacos:
       discovery:
-        server-addr: 192.168.1.186:8848  # 写的是我本地的nacos服务地址
-
+        server-addr: 1.14.166.148:8848
+    sentinel:
+      transport:
+        dashboard: 1.14.166.148:8858
 logging:
   level:
     com.yiyi_app.mapper: debug

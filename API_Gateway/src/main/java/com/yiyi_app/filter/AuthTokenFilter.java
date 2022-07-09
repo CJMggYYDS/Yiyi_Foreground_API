@@ -36,7 +36,6 @@ public class AuthTokenFilter implements GlobalFilter, Ordered {
         ServerHttpResponse serverHttpResponse = exchange.getResponse();
         String uri = serverHttpRequest.getURI().getPath();
 
-        System.out.println("路由网关拦截:" + uri);
         //检查白名单, 登录与注册请求直接放行,无需登录获取token校验
         if(uri.contains("/api/auth/token") || uri.contains("/api/users/register") || uri.contains("/api/items/categories") || uri.contains("/api/items/search") || uri.contains("/api/items/classify") || uri.contains("/api/items/hotItems")) {
             return chain.filter(exchange);

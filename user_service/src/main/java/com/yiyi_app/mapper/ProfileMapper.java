@@ -8,15 +8,15 @@ import java.util.List;
 @Mapper
 public interface ProfileMapper {
 
-    @Select("select * from  yiyi_db_v2.profile where uid=#{uid}")
+    @Select("select * from  shareclothes.profile where uid=#{uid}")
     List<Profile> getProfileByUserId(String uid);
 
-    @Select("select yiyi_db_v2.profile.itemId from yiyi_db_v2.profile where uid=#{uid}")
+    @Select("select itemId from shareclothes.profile where uid=#{uid}")
     List<String> getItemIdsByUID(String uid);
 
-    @Insert("insert into yiyi_db_v2.profile(uid, itemId) VALUES (#{uid}, #{itemId})")
+    @Insert("insert into shareclothes.profile(uid, itemId) VALUES (#{uid}, #{itemId})")
     int insertProfileByUserIdAndItemId(@Param("uid") String uid, @Param("itemId") String itemId);
 
-    @Delete("delete from yiyi_db_v2.profile where uid=#{uid} and itemId=#{itemId}")
+    @Delete("delete from shareclothes.profile where uid=#{uid} and itemId=#{itemId}")
     int deleteProfileByUserIdAndItemId(@Param("uid") String uid, @Param("itemId") String itemId);
 }

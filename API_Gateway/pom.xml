@@ -29,6 +29,11 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
         <!-- 引入负载均衡依赖, 让网关具有负载均衡能力 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -48,16 +53,6 @@
             <version>2.0.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>com</groupId>
-            <artifactId>yiyi_commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <!-- 引入nacos配置中心, 可在nacos中编辑应用的配置信息 -->
-        <!--<dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>-->
     </dependencies>
 
 </project>

@@ -40,9 +40,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com</groupId>
-            <artifactId>yiyi_commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
     </dependencies>
 
