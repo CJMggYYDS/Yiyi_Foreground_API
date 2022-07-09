@@ -34,13 +34,18 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemVO getItemByItemId(String itemId) {
+    public ItemVO getItemVOByItemId(String itemId) {
         if(itemId!=null) {
             Item item=itemMapper.getItemByItemId(itemId);
             Integer sales=itemMapper.getSalesByItemId(itemId);
             return new ItemVO(item.getItemId(),item.getClassify(),item.getItemName(),item.getPrice(),item.getUrl(),item.getInventory(),sales);
         }
         return null;
+    }
+
+    @Override
+    public Item getItemByItemId(String itemId) {
+        return itemMapper.getItemByItemId(itemId);
     }
 
     @Override
@@ -57,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemVO> getItemsByIdList(List<String> items) {
         List<ItemVO> results=new ArrayList<>();
         items.forEach(itemId -> {
-            ItemVO itemVO=getItemByItemId(itemId);
+            ItemVO itemVO=getItemVOByItemId(itemId);
             results.add(itemVO);
         });
         return results;
@@ -78,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemTimeVO> getItemsTimeVOByIdList(List<ItemTime> itemTimes) {
         List<ItemTimeVO> results=new ArrayList<>();
         itemTimes.forEach(itemTime -> {
-            ItemVO itemVO=getItemByItemId(itemTime.getItemId());
+            ItemVO itemVO=getItemVOByItemId(itemTime.getItemId());
             ItemTimeVO itemTimeVO=new ItemTimeVO(itemVO.getItemId(), itemVO.getClassify(), itemVO.getItemName(), itemVO.getPrice(), itemVO.getUrl(), itemVO.getInventory(), itemVO.getSales(), itemTime.getTimestamp());
             results.add(itemTimeVO);
         });

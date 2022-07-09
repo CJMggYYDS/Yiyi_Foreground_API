@@ -77,7 +77,7 @@ public class ItemController {
      */
     @GetMapping("/items/item/{itemId}")
     public ResponseResult getItem(@PathVariable("itemId") String itemId, @RequestHeader("uid") String uid){
-        ItemVO item = itemService.getItemByItemId(itemId);
+        ItemVO item = itemService.getItemVOByItemId(itemId);
         if(item!=null && (!Objects.equals(uid, "未登录"))) {
             logger.addBrowseAction(uid, itemId);
         }
@@ -104,20 +104,20 @@ public class ItemController {
     public ResponseResult getRecommendItems(@PathVariable("uid") String uid) {
         List<UserSimilarityDTO> userSimilarityDTOList=userSimilarityService.getListUserSimilarityByUID(uid);
 
-        System.out.println("SimilarityDTO: "+userSimilarityDTOList);//
+        //System.out.println("SimilarityDTO: "+userSimilarityDTOList);//
 
         int topN=5;
         List<String> userUIDs= RecommendUtils.getSimilarityTopN(uid, userSimilarityDTOList, topN);
 
-        System.out.println("topN:" + userUIDs);//
+        //System.out.println("topN:" + userUIDs);//
 
         List<UserActiveDTO> userActiveDTOList=userActiveService.listAllUserActive();
 
-        System.out.println("userActiveDTO: "+userActiveDTOList);//
+        //System.out.println("userActiveDTO: "+userActiveDTOList);//
 
         List<String> recommendItems1=RecommendUtils.getRecommendItems(uid, userUIDs, userActiveDTOList);
 
-        System.out.println(recommendItems1);//1
+        //System.out.println(recommendItems1);//1
 
         List<String> top10Items=itemService.getTop10ItemsID();
 
@@ -132,7 +132,7 @@ public class ItemController {
                 .distinct()
                 .collect(Collectors.toList());
 
-        System.out.println(recommendItems);//5
+        //System.out.println(recommendItems);//5
 
         return ResponseResult.success(itemService.getItemsByIdList(recommendItems));
     }
@@ -142,7 +142,7 @@ public class ItemController {
      * @param itemIds
      * @date: 2022/7/5
      */
-    @PostMapping("/items/item")
+    @PostMapping("/items/itemvo")
     public List<ItemVO> getItemsByListId(@RequestBody List<String> itemIds) {
         return itemService.getItemsByIdList(itemIds);
     }

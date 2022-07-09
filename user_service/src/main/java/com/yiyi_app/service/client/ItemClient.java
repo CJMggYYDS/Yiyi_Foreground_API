@@ -20,7 +20,7 @@ public interface ItemClient {
     @GetMapping("/items/item/{itemId}")
     ItemVO getItemByItemId(@PathVariable("itemId") String itemId);
 
-    @PostMapping("/items/item")
+    @PostMapping("/items/itemvo")
     List<ItemVO> getItemsByListId(@RequestBody List<String> itemIds);
 
     @PostMapping("/items/timeItem")

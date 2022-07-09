@@ -1,6 +1,5 @@
 package com.yiyi_app.controller;
 
-import com.yiyi_app.entity.Item;
 import com.yiyi_app.entity.Orderlist;
 import com.yiyi_app.entity.Orders;
 import com.yiyi_app.mapper.OrderlistMapper;
@@ -9,12 +8,9 @@ import com.yiyi_app.service.OrderService;
 import com.yiyi_app.util.ResponseResult;
 import com.yiyi_app.vo.OrderVO;
 import com.yiyi_app.vo.RentItemListVO;
-import org.apache.logging.log4j.message.AsynchronouslyFormattable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.crypto.interfaces.PBEKey;
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,7 +34,7 @@ public class OrderController {
     * @author: egg
     * @create: 2022/7/4
     */
-    @PostMapping("/orders")
+    @PostMapping("/order")
     public ResponseResult insertOrder(@RequestHeader("uid") String uid,@RequestBody Map<String, Object> map ){
         Orderlist orderlist = new Orderlist();
         orderlist.setOrderid(map.get("orderid").toString());
@@ -147,7 +143,7 @@ public class OrderController {
      * @author: egg
      * @create: 2022/7/4
      */
-    @PutMapping("/order/{orderId}")
+    @DeleteMapping("/order/{orderId}")
     public ResponseResult deleteOrder(@RequestHeader("uid") String uid,@PathVariable("orderId") String orderId){
         Boolean res = orderService.deleteOrder(uid,orderId);
         if(res) {
@@ -184,7 +180,7 @@ public class OrderController {
      */
     @GetMapping("/users/order")
     @ResponseBody
-    public List<OrderVO> getOrderByUid(@RequestHeader("uid") String uid){
+    public List<OrderVO> getOrderByUid(@RequestBody String uid){
         List<OrderVO> responseData = orderService.getOrderByuid(uid);
         return responseData;
     }

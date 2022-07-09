@@ -14,7 +14,9 @@ public interface ItemService {
 
     List<Category> getAllCategories();
 
-    ItemVO getItemByItemId(String itemId);
+    ItemVO getItemVOByItemId(String itemId);
+
+    Item getItemByItemId(String itemId);
 
     List<Item> getItemsByClassify(String classify);
 
