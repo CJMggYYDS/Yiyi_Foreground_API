@@ -1,6 +1,7 @@
 package com.yiyi_app.controller;
 
-import com.yiyi_app.entity.Item;
+import com.yiyi_app.vo.ItemTimeVO;
+import com.yiyi_app.vo.ItemVO;
 import com.yiyi_app.entity.User;
 import com.yiyi_app.service.LogService;
 import com.yiyi_app.service.UserService;
@@ -104,7 +105,7 @@ public class UserController {
      */
     @GetMapping("/users/favourite/{uid}")
     public ResponseResult getProfileItems(@PathVariable("uid") String uid) {
-        List<Item> responseData=userService.getItemsFromProfile(uid);
+        List<ItemVO> responseData=userService.getItemsFromProfile(uid);
         return ResponseResult.success(responseData);
     }
 
@@ -153,8 +154,7 @@ public class UserController {
      */
     @GetMapping("/users/history/{uid}")
     public ResponseResult getLogItems(@PathVariable("uid") String uid) {
-        List<Item> responseData=userService.getItemsFromLog(uid);
+        List<ItemTimeVO> responseData=userService.getItemsFromLog(uid);
         return ResponseResult.success(responseData);
     }
-
 }

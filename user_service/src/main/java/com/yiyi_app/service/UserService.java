@@ -1,6 +1,7 @@
 package com.yiyi_app.service;
 
-import com.yiyi_app.entity.Item;
+import com.yiyi_app.vo.ItemTimeVO;
+import com.yiyi_app.vo.ItemVO;
 import com.yiyi_app.entity.Profile;
 import com.yiyi_app.entity.User;
 
@@ -22,7 +23,7 @@ public interface UserService {
 
     Boolean removeItemFromProfile(String uid, String itemId);
 
-    List<Item> getItemsFromProfile(String uid);
+    List<ItemVO> getItemsFromProfile(String uid);
 
-    List<Item> getItemsFromLog(String uid);
+    List<ItemTimeVO> getItemsFromLog(String uid);
 }

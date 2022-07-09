@@ -17,4 +17,10 @@ public interface ItemMapper {
 
     @Select("select * from yiyi_db_v2.item where lower(itemName) like #{keyword}")
     List<Item> searchItemsByKeyword(String keyword);
+
+    @Select("select sales from yiyi_db_v2.itemsales where itemid=#{itemId}")
+    Integer getSalesByItemId(String itemId);
+
+    @Select("select itemId from yiyi_db_v2.itemsales order by sales desc limit 10")
+    List<String> getItemsSalesTop10();
 }

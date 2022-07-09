@@ -38,10 +38,45 @@ public class AuthTokenFilter implements GlobalFilter, Ordered {
 
         System.out.println("路由网关拦截:" + uri);
         //检查白名单, 登录与注册请求直接放行,无需登录获取token校验
-        if(uri.contains("/api/auth/token") || uri.contains("/api/users/register")) {
+        if(uri.contains("/api/auth/token") || uri.contains("/api/users/register") || uri.contains("/api/items/categories") || uri.contains("/api/items/search") || uri.contains("/api/items/classify") || uri.contains("/api/items/hotItems")) {
             return chain.filter(exchange);
         }
-        //从请求头中取出token
+        //如果是浏览商品的请求，如果没有token也直接放行，有则将uid放入请求头中再放行
+        if(uri.contains("/api/items/item")) {
+            String token_str=serverHttpRequest.getHeaders().getFirst("Authorization");
+            if(token_str==null) {
+                ServerHttpRequest mutableRequest=serverHttpRequest
+                        .mutate()
+                        .header("uid", "未登录")
+                        .build();
+
+                ServerWebExchange mutableExchange=exchange
+                        .mutate()
+                        .request(mutableRequest)
+                        .build();
+                return chain.filter(mutableExchange);
+            }
+            else {
+                try{
+                    JWTUtil.verifyToken(token_str, secretKey);
+                }catch (Exception e) {
+                    return getVoidMono(serverHttpResponse, ResponseCodeEnum.TOKEN_INVALID);
+                }
+                String uid_str=JWTUtil.getUIDfromToken(token_str);
+                ServerHttpRequest mutableRequest=serverHttpRequest
+                        .mutate()
+                        .header("uid", uid_str)
+                        .build();
+
+                ServerWebExchange mutableExchange=exchange
+                        .mutate()
+                        .request(mutableRequest)
+                        .build();
+                return chain.filter(mutableExchange);
+            }
+        }
+
+        //其余请求从请求头中取出token
         String token = serverHttpRequest.getHeaders().getFirst("Authorization");
         //如果未携带token
         if(token==null) {

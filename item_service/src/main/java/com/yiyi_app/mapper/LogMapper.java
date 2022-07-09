@@ -1,5 +1,6 @@
 package com.yiyi_app.mapper;
 
+import com.yiyi_app.entity.ItemTime;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface LogMapper {
     @Delete("delete from yiyi_db_v2.log where uid=#{uid} and action=#{action} and itemId=#{itemId}")
     int deleteAction(@Param("uid") String uid, @Param("action") int action, @Param("itemId") String itemId);
 
-    @Select("select yiyi_db_v2.log.itemId from yiyi_db_v2.log where uid=#{uid} and action=#{action}")
-    List<String> selectItemsFromLogByUId(@Param("uid") String uid, @Param("action") int action);
+    @Select("select itemId, timestamp from yiyi_db_v2.log where uid=#{uid} and action=#{action} order by timestamp desc")
+    List<ItemTime> selectItemsFromLogByUId(@Param("uid") String uid, @Param("action") int action);
 }
+

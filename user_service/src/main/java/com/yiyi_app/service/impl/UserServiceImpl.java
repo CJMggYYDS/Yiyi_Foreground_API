@@ -1,17 +1,16 @@
 package com.yiyi_app.service.impl;
 
-import com.yiyi_app.entity.Item;
-import com.yiyi_app.entity.Profile;
-import com.yiyi_app.entity.User;
+import com.yiyi_app.entity.*;
 import com.yiyi_app.mapper.LogMapper;
 import com.yiyi_app.mapper.ProfileMapper;
 import com.yiyi_app.mapper.UserMapper;
 import com.yiyi_app.service.UserService;
 import com.yiyi_app.service.client.ItemClient;
+import com.yiyi_app.vo.ItemTimeVO;
+import com.yiyi_app.vo.ItemVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,14 +64,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Item> getItemsFromProfile(String uid) {
+    public List<ItemVO> getItemsFromProfile(String uid) {
         List<String> itemIds=profileMapper.getItemIdsByUID(uid);
         return itemClient.getItemsByListId(itemIds);
     }
 
     @Override
-    public List<Item> getItemsFromLog(String uid) {
-        List<String> itemIds=log_Mapper.selectItemsFromLogByUId(uid, 1);
-        return itemClient.getItemsByListId(itemIds);
+    public List<ItemTimeVO> getItemsFromLog(String uid) {
+        List<ItemTime> itemIds=log_Mapper.selectItemsFromLogByUId(uid, 1);
+        return itemClient.getItemTimeVOsByList(itemIds);
     }
 }

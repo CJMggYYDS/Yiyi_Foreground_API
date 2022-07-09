@@ -1,5 +1,6 @@
-package com.yiyi_app.entity;
+package com.yiyi_app.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,12 +8,14 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class Item {
-
+@AllArgsConstructor
+public class ItemTimeVO {
     String itemId;
     String classify;
     String itemName;
     BigDecimal price;
     String url;
     Integer inventory;
+    Integer sales;
+    String timestamp;
 }

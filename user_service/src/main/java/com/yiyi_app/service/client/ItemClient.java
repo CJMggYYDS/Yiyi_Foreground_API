@@ -1,6 +1,8 @@
 package com.yiyi_app.service.client;
 
-import com.yiyi_app.entity.Item;
+import com.yiyi_app.entity.ItemTime;
+import com.yiyi_app.vo.ItemTimeVO;
+import com.yiyi_app.vo.ItemVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,11 @@ public interface ItemClient {
 
     //该接口暂时没有用处
     @GetMapping("/items/item/{itemId}")
-    Item getItemByItemId(@PathVariable("itemId") String itemId);
+    ItemVO getItemByItemId(@PathVariable("itemId") String itemId);
 
     @PostMapping("/items/item")
-    List<Item> getItemsByListId(@RequestBody List<String> itemIds);
+    List<ItemVO> getItemsByListId(@RequestBody List<String> itemIds);
+
+    @PostMapping("/items/timeItem")
+    List<ItemTimeVO> getItemTimeVOsByList(@RequestBody List<ItemTime> itemTimes);
 }
