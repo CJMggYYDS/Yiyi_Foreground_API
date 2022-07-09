@@ -1,4 +1,4 @@
-package com.yiyi_app.vo;
+package com.yiyi_app.vo.RentVO;
 
 import lombok.Data;
 

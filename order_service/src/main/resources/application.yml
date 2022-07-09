@@ -6,7 +6,7 @@ spring:
     name: order-service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://1.14.166.148/shareClothes
+    url: jdbc:mysql://1.14.166.148:3306/shareclothes
     username: root
     password: 123456
   cloud:

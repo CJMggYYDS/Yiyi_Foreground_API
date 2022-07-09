@@ -154,8 +154,8 @@ public class ItemController {
     * @author: egg
     * @create: 2022/7/4
     */
-    @PostMapping("/items/item")
-    public Item getItemsByItemId(@RequestBody String itemId) {
+    @PostMapping("/items/item/getItemsByItemId")
+    public Item getItemsByItemId(@RequestParam("itemId") String itemId) {
         return itemService.getItemByItemId(itemId);
     }
 

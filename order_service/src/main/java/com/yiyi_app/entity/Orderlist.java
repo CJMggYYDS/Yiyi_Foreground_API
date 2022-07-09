@@ -13,15 +13,13 @@ public class Orderlist {
 
     String orderid;
 
-    @TableId(type = IdType.INPUT)
-    String itemId;
+    String itemid;
 
-    int orderListstatus;
+    int orderliststatus;
 
     int days;
 
     int num;
 
     BigDecimal unitprice;
-
 }

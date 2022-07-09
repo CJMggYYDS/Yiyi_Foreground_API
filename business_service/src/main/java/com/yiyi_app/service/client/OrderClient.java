@@ -2,12 +2,13 @@ package com.yiyi_app.service.client;
 
 import com.yiyi_app.entity.Orderlist;
 import com.yiyi_app.entity.Orders;
+import com.yiyi_app.vo.RentVO;
 import com.yiyi_app.vo.orderVO.OrderVO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
 * @param: *
@@ -15,21 +16,25 @@ import java.util.Map;
 * @author: egg
 * @create: 2022/7/4
 */
-@FeignClient("order-service")
+@Component
+@FeignClient(value ="order-service")
 public interface OrderClient {
 
-    @PostMapping("/orders")
-    boolean insertOrder(@RequestBody Map<String, Object> map );
+    @PostMapping(value = "/orders/insertOrder")
+    boolean insertOrder(@RequestBody RentVO rentVO);
 
-    @PutMapping("/orders")
-    boolean updateOrderStatus(@RequestParam String uid,@RequestParam String itemId,@RequestParam int status);
+    @PostMapping("/orders/updateOrderStatus")
+    boolean updateOrderStatus(@RequestParam("orderId") String orderId,@RequestParam("itemId") String itemId,@RequestParam("orderListStatus") int orderListStatus);
 
-    @GetMapping("/users/order")
+    @PostMapping("/users/order/getOrderByUid")
     List<OrderVO> getOrderByUid(@RequestBody String uid);
 
-    @GetMapping("/users/order")
-    Orderlist getOrderListByItemId(@RequestBody String itemId);
+    @PostMapping("/users/order/getOrderListByItemId")
+    Orderlist getOrderListById(@RequestParam("orderId") String orderId,@RequestParam("itemId") String itemId);
 
-    @GetMapping("/users/order")
-    Orders getOrdersByItemId(@RequestBody String uid);
+    @PostMapping("/users/order/getOrdersByOrderId")
+    Orders getOrdersByOrderId(@RequestParam("orderId") String orderId);
+
+    @PostMapping("/users/order/getOrderListByOrderId")
+    List<Orderlist> getOrderListByOrderId(@RequestParam("orderId") String orderId);
 }
