@@ -119,8 +119,8 @@ public class OrderController {
     * @create: 2022/7/4
     */
     @PutMapping("/orders/")
-    public Boolean updateOrderStatus(@RequestBody String orderId,@RequestBody String itemId,@RequestBody int status){
-        boolean res = orderService.updateOrderStatus(orderId,itemId,status);
+    public Boolean updateOrderStatus(@RequestParam String uid,@RequestParam String itemId,@RequestParam int status){
+        boolean res = orderService.updateOrderStatus(uid,itemId,status);
         return res;
     }
 

@@ -22,7 +22,7 @@ public interface OrderClient {
     boolean insertOrder(@RequestBody Map<String, Object> map );
 
     @PutMapping("/orders")
-    boolean updateOrderStatus(@RequestBody String uid,@RequestBody String itemId,@RequestBody int status);
+    boolean updateOrderStatus(@RequestParam String uid,@RequestParam String itemId,@RequestParam int status);
 
     @GetMapping("/users/order")
     List<OrderVO> getOrderByUid(@RequestBody String uid);

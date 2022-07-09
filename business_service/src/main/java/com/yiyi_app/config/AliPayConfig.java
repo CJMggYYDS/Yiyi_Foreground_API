@@ -4,12 +4,14 @@ import com.alipay.easysdk.factory.Factory;
 import com.alipay.easysdk.kernel.Config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Data
 @Component
+@Configuration
 @ConfigurationProperties(prefix = "alipay")
 public class AliPayConfig {
     private String appId;

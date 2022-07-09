@@ -21,10 +21,10 @@ import java.util.List;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
-    //自动注入Mapper
-    @Autowired
+    @Resource
     private OrdersMapper ordersMapper;
-    @Autowired
+
+    @Resource
     private OrderlistMapper orderlistMapper;
 
     @Resource

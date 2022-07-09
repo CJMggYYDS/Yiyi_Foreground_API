@@ -6,12 +6,12 @@ import com.yiyi_app.dto.AliPay;
 import com.yiyi_app.entity.*;
 
 import com.yiyi_app.service.BusinessService;
-import com.yiyi_app.service.client.ItemClient;
 import com.yiyi_app.service.client.OrderClient;
 import com.yiyi_app.util.ResponseCodeEnum;
 import com.yiyi_app.util.ResponseResult;
 import com.yiyi_app.vo.ItemListVO;
 import com.yiyi_app.vo.RentVO;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -185,8 +185,8 @@ public class businessController {
         return response.getBody();
     }
 
-    @PostMapping("/notify")  // 注意这里必须是POST接口
-    public ResponseResult payNotify(@RequestHeader("uid") String uid,@RequestBody String orderID, HttpServletRequest request) throws Exception {
+    @PostMapping("/business/order/{orderId}/notify")  // 注意这里必须是POST接口
+    public ResponseResult payNotify(@RequestHeader("uid") String uid,@PathVariable("orderId") String orderID, HttpServletRequest request) throws Exception {
         if (request.getParameter("trade_status").equals("TRADE_SUCCESS")) {
             System.out.println("=========支付宝异步回调========");
 
@@ -210,7 +210,6 @@ public class businessController {
 
                 // 更新订单为已支付
                 PayRes= orderClient.updateOrderStatus(uid,orderID,2);
-
 
             }
         }

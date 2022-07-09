@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Service("businessService")
+@Service
 public class BusinessServiceImpl implements BusinessService {
 
     @Resource
