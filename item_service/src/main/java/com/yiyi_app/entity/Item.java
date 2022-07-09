@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Item {
 
-    String itemId;
+    String itemid;
     String classify;
-    String itemName;
+    String itemname;
     BigDecimal price;
     String url;
     Integer inventory;

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class Item {
 
     @TableId(value = "itemid" ,type = IdType.INPUT)
-    String itemId;
+    String itemid;
 
     String classify;
 

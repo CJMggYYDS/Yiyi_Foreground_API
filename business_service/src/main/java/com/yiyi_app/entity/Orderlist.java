@@ -5,13 +5,16 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @TableName("orderlist")
 public class Orderlist {
-    @TableId(type = IdType.INPUT)
     String orderid;
+    @TableId(type = IdType.INPUT)
     String itemId;
     int orderListstatus;
     int days;
     int num;
+    BigDecimal unitprice;
 }

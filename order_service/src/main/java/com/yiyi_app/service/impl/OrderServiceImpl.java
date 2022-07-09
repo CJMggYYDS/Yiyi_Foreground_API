@@ -1,6 +1,5 @@
 package com.yiyi_app.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yiyi_app.entity.Item;
@@ -12,7 +11,6 @@ import com.yiyi_app.service.OrderService;
 import com.yiyi_app.service.client.ItemClient;
 import com.yiyi_app.vo.ItemListVO;
 import com.yiyi_app.vo.OrderVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,29 +31,34 @@ public class OrderServiceImpl implements OrderService {
     public static String orderId;
 
     @Override
-    public Boolean insertOrder(Orders order, Orderlist orderlist) {
-        return (ordersMapper.insert(order)& orderlistMapper.insert(orderlist) )> 0;
+    public Boolean insertOrder(Orders orders) {
+        return ordersMapper.insert(orders)> 0;
     }
 
     @Override
-    public Boolean updateOrderStatus(String uid, String itemId,int status) {
-        Orderlist orderlist1 = orderlistMapper.selectById(itemId) ;
+    public Boolean insertOrderList(Orderlist orderlist) {
+        return orderlistMapper.insert(orderlist) > 0;
+    }
 
+    @Override
+    public Boolean updateOrderStatus(String orderId, String itemId,int orderListStatus) {
         Orderlist orderlist = new Orderlist();
-        orderlist.setOrderid(orderlist1.getOrderid());
-        orderlist.setItemId(itemId);
-        orderlist.setOrderListstatus(status);
+        orderlist.setOrderid(orderId);
+        orderlist.setItemid(itemId);
+        orderlist.setOrderliststatus(orderListStatus);
         UpdateWrapper<Orderlist> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("orderid", orderlist1.getOrderid());
+        updateWrapper.eq("orderid", orderId);
         updateWrapper.eq("itemId", itemId);
 
+        QueryWrapper<Orders> OrdersQueryWrapper = new QueryWrapper<>();
+        OrdersQueryWrapper.eq("orderid",orderId);
+        Orders orders1 = ordersMapper.selectOne(OrdersQueryWrapper);
+
         Orders orders = new Orders();
-        orders.setUid(uid);
-        orders.setOrderid(orderlist1.getOrderid());
-        orders.setOrderstatus(status);
+        orders.setOrderid(orderId);
+        orders.setOrderstatus(orders1.getOrderstatus()-1);
         UpdateWrapper<Orders> updateWrapper2 = new UpdateWrapper<>();
-        updateWrapper2.eq("uid", uid);
-        updateWrapper2.eq("orderid", orderlist1.getOrderid());
+        updateWrapper2.eq("orderid", orderId);
 
         return ( ordersMapper.update(orders,updateWrapper2) & orderlistMapper.update(orderlist,updateWrapper) ) != 0;
 
@@ -65,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     public Boolean updateOrder(String uid,String orderId,String address,String itemId,int days,int num) {
         Orderlist orderlist = new Orderlist();
         orderlist.setOrderid(orderId);
-        orderlist.setItemId(itemId);
+        orderlist.setItemid(itemId);
         orderlist.setDays(days);
         orderlist.setNum(num);
         UpdateWrapper<Orderlist> OiderListUpdateWrapper = new UpdateWrapper<>();
@@ -110,16 +113,16 @@ public class OrderServiceImpl implements OrderService {
 
         OrderVO orderVO = new OrderVO();
         orderVO.setOrderId(orderlist.getOrderid());
-        orderVO.setStatus(orderlist.getOrderListstatus());
+        orderVO.setStatus(orderlist.getOrderliststatus());
         orderVO.setAddress(orders.getAddress());
         orderVO.setUid(orders.getUid());
         orderVO.setTimestamp(orders.getOrdertime());
 
         ItemListVO itemListVO = new ItemListVO();
-        Item item=itemClient.getItemByItemId(orderlist.getItemId());
+        Item item=itemClient.getItemByItemId(orderlist.getItemid());
         itemListVO.setItem(item);
         itemListVO.setDays(orderlist.getDays());
-        itemListVO.setStatus(orderlist.getOrderListstatus());
+        itemListVO.setStatus(orderlist.getOrderliststatus());
         itemListVO.setNum(orderlist.getNum());
         List<ItemListVO> itemList = new ArrayList<>();
         itemList.add(itemListVO);

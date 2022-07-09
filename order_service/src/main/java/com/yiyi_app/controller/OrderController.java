@@ -1,5 +1,6 @@
 package com.yiyi_app.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yiyi_app.entity.Orderlist;
 import com.yiyi_app.entity.Orders;
 import com.yiyi_app.mapper.OrderlistMapper;
@@ -7,12 +8,11 @@ import com.yiyi_app.mapper.OrdersMapper;
 import com.yiyi_app.service.OrderService;
 import com.yiyi_app.util.ResponseResult;
 import com.yiyi_app.vo.OrderVO;
-import com.yiyi_app.vo.RentItemListVO;
+import com.yiyi_app.vo.RentVO.RentVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -38,20 +38,22 @@ public class OrderController {
     public ResponseResult insertOrder(@RequestHeader("uid") String uid,@RequestBody Map<String, Object> map ){
         Orderlist orderlist = new Orderlist();
         orderlist.setOrderid(map.get("orderid").toString());
-        orderlist.setOrderListstatus(Integer.parseInt(map.get("status").toString()));
-        orderlist.setItemId(map.get("itemid").toString());
+        orderlist.setOrderliststatus(Integer.parseInt(map.get("status").toString()));
+        orderlist.setItemid(map.get("itemid").toString());
         orderlist.setDays(Integer.parseInt(map.get("days").toString()));
         orderlist.setNum(Integer.parseInt(map.get("num").toString()));
         
-        Orders order = new Orders();
-        order.setOrderid(map.get("orderid").toString());
-        order.setOrderstatus(Integer.parseInt(map.get("status").toString()));
-        order.setUid(uid);
-        order.setAddress(map.get("address").toString());
-        order.setOrdertime(map.get("ordertime").toString());
-        
-        boolean res = orderService.insertOrder(order,orderlist);
-        if(res) {
+        Orders orders = new Orders();
+        orders.setOrderid(map.get("orderid").toString());
+        orders.setOrderstatus(Integer.parseInt(map.get("status").toString()));
+        orders.setUid(uid);
+        orders.setAddress(map.get("address").toString());
+        orders.setOrdertime(map.get("ordertime").toString());
+
+        boolean res2 = orderService.insertOrderList(orderlist);
+        boolean res = orderService.insertOrder(orders);
+
+        if(res & res2) {
             return ResponseResult.success();
         }
         else {
@@ -65,42 +67,44 @@ public class OrderController {
      * @author: egg
      * @create: 2022/7/4
      */
-    @PostMapping("/orders")
-    public Boolean insertOrder(@RequestBody Map<String, Object> map ){
+    @PostMapping("/orders/insertOrder")
+    public boolean insertOrder(@RequestBody RentVO rentVO){
+        System.out.println(rentVO);
+        System.out.println(rentVO.getItemList());
+        System.out.println(rentVO.getItemList().size());
 
-        ArrayList<Object> list = (ArrayList<Object>) map.get("itemList");
-        ArrayList<RentItemListVO> rentItemListVOS = new ArrayList<>();
-        RentItemListVO itemList = null;
-        for (Object object : list) {
-            itemList = new RentItemListVO();
-            itemList.setItemId(((LinkedHashMap<Object, Object>) object).get("itemId").toString());
-            itemList.setDays(Integer.parseInt(((LinkedHashMap<Object, Object>) object).get("days").toString()));
-            itemList.setNum(Integer.parseInt(((LinkedHashMap<Object, Object>) object).get("num").toString()));
-            rentItemListVOS.add(itemList);
-        }
+        Orders orders = new Orders();
+        orders.setOrderid(rentVO.getOrderId());
+        orders.setOrderstatus(rentVO.getOrderstatus());
+        orders.setUid(rentVO.getUid());
+        orders.setAddress(rentVO.getAddress());
+        orders.setOrdertime(rentVO.getTimestamp());
+        System.out.println(orders);
+        boolean res2 = orderService.insertOrder(orders);
 
-        for(int i = 0 ; i<rentItemListVOS.size();i++){
+        for(int i = 0 ; i<rentVO.getItemList().size();i++){
+            System.out.println(rentVO);
             Orderlist orderlist = new Orderlist();
-            orderlist.setOrderid(map.get("orderid").toString());
-            orderlist.setOrderListstatus(Integer.parseInt(map.get("status").toString()));
-            orderlist.setItemId(rentItemListVOS.get(i).getItemId());
-            orderlist.setDays(rentItemListVOS.get(i).getDays());
-            orderlist.setNum(rentItemListVOS.get(i).getNum());
+            orderlist.setOrderid(rentVO.getOrderId());
+            orderlist.setOrderliststatus(rentVO.getOrderliststatus());
+            orderlist.setItemid(rentVO.getItemList().get(i).getItemId());
+            orderlist.setDays(rentVO.getItemList().get(i).getDays());
+            orderlist.setNum(rentVO.getItemList().get(i).getNum());
+            orderlist.setUnitprice(BigDecimal.valueOf(99));
+            System.out.println(orderlist);
 
-            Orders order = new Orders();
-            order.setOrderid(map.get("orderid").toString());
-            order.setOrderstatus(Integer.parseInt(map.get("status").toString()));
-            order.setUid(map.get("uid").toString());
-            order.setAddress(map.get("address").toString());
-            order.setOrdertime(map.get("ordertime").toString());
-
-            boolean res = orderService.insertOrder(order,orderlist);
-
-            if (res)
+            boolean res = orderService.insertOrderList(orderlist);
+            System.out.println("res"+res);
+            System.out.println(rentVO);
+            if (res){
                 count++;
+                System.out.println("count"+count);
+            }
+
         }
 
-        if(count == rentItemListVOS.size())
+
+        if(count == rentVO.getItemList().size() & res2)
             result=true;
         else
             result = false;
@@ -114,9 +118,9 @@ public class OrderController {
     * @author: egg
     * @create: 2022/7/4
     */
-    @PutMapping("/orders/")
-    public Boolean updateOrderStatus(@RequestParam String uid,@RequestParam String itemId,@RequestParam int status){
-        boolean res = orderService.updateOrderStatus(uid,itemId,status);
+    @PostMapping("/orders/updateOrderStatus")
+    public Boolean updateOrderStatus(@RequestParam String orderId,@RequestParam String itemId,@RequestParam int orderListStatus){
+        boolean res = orderService.updateOrderStatus(orderId,itemId,orderListStatus);
         return res;
     }
 
@@ -178,9 +182,8 @@ public class OrderController {
      * @author: egg
      * @create: 2022/7/4
      */
-    @GetMapping("/users/order")
-    @ResponseBody
-    public List<OrderVO> getOrderByUid(@RequestBody String uid){
+    @PostMapping("/users/order/getOrderByUid")
+    public List<OrderVO> getOrderByUid(@RequestHeader("uid") String uid){
         List<OrderVO> responseData = orderService.getOrderByuid(uid);
         return responseData;
     }
@@ -191,10 +194,14 @@ public class OrderController {
      * @author: egg
      * @create: 2022/7/4
      */
-    @GetMapping("/users/order")
-    @ResponseBody
-    public Orderlist getOrderListByItemId(@RequestBody String itemId){
-        Orderlist responseData = orderlistMapper.selectById(itemId);
+    @PostMapping("/users/order/getOrderListByItemId")
+    public Orderlist getOrderListById(@RequestParam("orderId") String orderId,@RequestParam("itemId") String itemId){
+        System.out.println("itemId"+itemId+",orderId"+orderId);
+        QueryWrapper<Orderlist> QueryWrapper = new QueryWrapper<>();
+        QueryWrapper.eq("itemid",itemId);
+        QueryWrapper.eq("orderId",orderId);
+        Orderlist responseData = orderlistMapper.selectOne(QueryWrapper);
+        System.out.println("getOrderListByItemId"+responseData);
         return responseData;
     }
 
@@ -204,10 +211,23 @@ public class OrderController {
      * @author: egg
      * @create: 2022/7/4
      */
-    @GetMapping("/users/order")
-    @ResponseBody
-    public Orders getOrderByItemId(@RequestBody String uid){
-        Orders responseData = ordersMapper.selectById(uid);
+    @PostMapping("/users/order/getOrdersByOrderId")
+    public Orders getOrdersByOrderId(@RequestParam("orderId") String orderId){
+        System.out.println("orderId"+orderId);
+        QueryWrapper<Orders> QueryWrapper = new QueryWrapper<>();
+        QueryWrapper.eq("orderId",orderId);
+        Orders responseData = ordersMapper.selectOne(QueryWrapper);
+        System.out.println("getOrderListByItemId"+responseData);
+        return responseData;
+    }
+
+    @PostMapping("/users/order/getOrderListByOrderId")
+    public List<Orderlist> getOrderListByOrderId(@RequestParam("orderId") String orderId){
+        System.out.println("orderId"+orderId);
+        QueryWrapper<Orderlist> QueryWrapper = new QueryWrapper<>();
+        QueryWrapper.eq("orderId",orderId);
+        List<Orderlist> responseData = orderlistMapper.selectList(QueryWrapper);
+        System.out.println("getOrderListByOrderId"+responseData);
         return responseData;
     }
 }

@@ -1,26 +1,18 @@
-package com.yiyi_app.entity;
+package com.yiyi_app.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.yiyi_app.entity.Item;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-@TableName("cart")
-public class Cart {
-    @TableId(value = "uid" ,type = IdType.INPUT)
+public class CartVO {
     String uid;
-
-    @TableId(value = "itemid" ,type = IdType.INPUT)
-    String itemid;
-
+    Item item;
     String timestamp;
-
     BigDecimal price;
-
     int num;
-
     int days;
 }

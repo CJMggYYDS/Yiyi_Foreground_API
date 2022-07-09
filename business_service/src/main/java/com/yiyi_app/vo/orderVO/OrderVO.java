@@ -1,6 +1,6 @@
 package com.yiyi_app.vo.orderVO;
 
-import com.yiyi_app.vo.ItemListVO;
+import com.yiyi_app.vo.RentItemListVO;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,5 +13,5 @@ public class OrderVO {
     String uid;
     String address;
     String timestamp;
-    List<ItemListVO> itemList = new ArrayList<>();
+    List<RentItemListVO> itemList = new ArrayList<>();
 }

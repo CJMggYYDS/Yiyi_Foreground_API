@@ -1,5 +1,6 @@
 package com.yiyi_app.service.impl;
 
+import com.alipay.api.domain.OrderStatusData;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.yiyi_app.entity.Cart;
@@ -7,16 +8,14 @@ import com.yiyi_app.persistence.CartMapper;
 import com.yiyi_app.service.BusinessService;
 import com.yiyi_app.service.client.ItemClient;
 import com.yiyi_app.service.client.OrderClient;
+import com.yiyi_app.vo.CartVO;
 import com.yiyi_app.vo.RentVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BusinessServiceImpl implements BusinessService {
@@ -32,24 +31,19 @@ public class BusinessServiceImpl implements BusinessService {
 
     //租赁商品下单
     @Override
-    public Boolean rentItem(String uid, RentVO rentVO) {
-        String orderID = UUID.randomUUID().toString().trim().replaceAll("-", "");
-
-        Map<String,Object> map = new HashMap<String,Object>();//创建Map对象，Object是所有类型的父类
-        map.put("uid",uid);
-        map.put("orderid",orderID);
-        map.put("itemList",rentVO.getItemList());
-        map.put("status",1);
-        map.put("address",rentVO.getAddress());
-        map.put("ordertime",rentVO.getTimestamp());
-        Boolean res = orderClient.insertOrder(map);
-
+    public Boolean rentItem(RentVO rentVO) {
+        System.out.println(rentVO);
+        System.out.println(rentVO.getItemList().get(0).getItemId());
+        System.out.println(rentVO.getItemList().get(1).getItemId());
+        Boolean res = orderClient.insertOrder(rentVO);
+        System.out.println("#############");
+        System.out.println("#############rentVO"+rentVO);
         return res;
     }
 
     @Override
-    public Boolean returnItem(String uid, String itemid) {
-        boolean res = orderClient.updateOrderStatus(uid,itemid,0);
+    public Boolean returnItem(String orderId, String itemid) {
+        boolean res = orderClient.updateOrderStatus(orderId,itemid,0);
         return res;
     }
 
@@ -57,7 +51,7 @@ public class BusinessServiceImpl implements BusinessService {
     public Boolean addCart(String uid, String itemId, int num, int days) {
         Cart cart = new Cart();
         cart.setUid(uid);
-        cart.setItemId(itemId);
+        cart.setItemid(itemId);
         cart.setPrice(itemClient.getItemsByItemId(itemId).getPrice());
 
         //获取当前日期
@@ -68,6 +62,7 @@ public class BusinessServiceImpl implements BusinessService {
 
         cart.setNum(num);
         cart.setDays(days);
+        System.out.println("insert cart:"+cart);
 
         return cartMapper.insert(cart) > 0 ;
     }
@@ -81,7 +76,7 @@ public class BusinessServiceImpl implements BusinessService {
 
         Cart cart = new Cart();
         cart.setUid(uid);
-        cart.setItemId(itemId);
+        cart.setItemid(itemId);
         cart.setNum(num);
         cart.setDays(days);
 
@@ -93,11 +88,22 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<Cart> getCartByUid(String Uid) {
+    public List<CartVO> getCartByUid(String Uid) {
         QueryWrapper<Cart> cartQueryWrapper = new QueryWrapper<>();
         cartQueryWrapper.eq("uid",Uid);
         List<Cart> cartList = cartMapper.selectList(cartQueryWrapper);
-        return cartList;
+        List<CartVO> cartVOList = new ArrayList<>();
+        CartVO cartVO = new CartVO();
+        for (Cart cart : cartList) {
+            cartVO.setItem(itemClient.getItemsByItemId(cart.getItemid()));
+            cartVO.setUid(Uid);
+            cartVO.setDays(cart.getDays());
+            cartVO.setNum(cart.getNum());
+            cartVO.setPrice(cart.getPrice());
+            cartVO.setTimestamp(cart.getTimestamp());
+            cartVOList.add(cartVO);
+        }
+        return cartVOList;
     }
 
     @Override
