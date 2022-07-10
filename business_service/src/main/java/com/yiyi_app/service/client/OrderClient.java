@@ -27,7 +27,7 @@ public interface OrderClient {
     boolean updateOrderStatus(@RequestParam("orderId") String orderId,@RequestParam("itemId") String itemId,@RequestParam("orderListStatus") int orderListStatus);
 
     @PostMapping("/users/order/getOrderByUid")
-    List<OrderVO> getOrderByUid(@RequestBody String uid);
+    List<List<OrderVO>> getOrderByUid(@RequestBody String uid);
 
     @PostMapping("/users/order/getOrderListByItemId")
     Orderlist getOrderListById(@RequestParam("orderId") String orderId,@RequestParam("itemId") String itemId);
