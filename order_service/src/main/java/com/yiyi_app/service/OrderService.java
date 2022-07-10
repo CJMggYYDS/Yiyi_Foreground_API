@@ -18,8 +18,8 @@ public interface OrderService {
 
     Boolean deleteOrder(String uid,String orderId);
 
-    List<OrderVO> getOrderByOrderId(String orderId);
+    OrderVO getOrderByOrderId(String orderId);
 
-    List<List<OrderVO>> getOrderByuid(String uid);
+    List<OrderVO> getOrderByuid(String uid);
 
 }
