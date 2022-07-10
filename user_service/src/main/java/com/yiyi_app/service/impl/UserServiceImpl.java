@@ -55,35 +55,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "profile",key = "'profile:'+#uid")
     public List<Profile> getProfiles(String uid) {
         return profileMapper.getProfileByUserId(uid);
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "profile",key="'profile:'+#uid"),
-                    @CacheEvict(value = "profileItems",key = "'profileItems:'+#uid")
-            }
-    )
     public Boolean addItemIntoProfile(String uid, String itemId) {
         return profileMapper.insertProfileByUserIdAndItemId(uid, itemId) > 0;
     }
 
     @Override
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "profile",key="'profile:'+#uid"),
-                    @CacheEvict(value = "profileItems",key = "'profileItems:'+#uid")
-            }
-    )
     public Boolean removeItemFromProfile(String uid, String itemId) {
         return profileMapper.deleteProfileByUserIdAndItemId(uid, itemId) > 0;
     }
 
     @Override
-    @Cacheable(value = "profileItems",key = "'profileItems:'+#uid")
     public List<ItemVO> getItemsFromProfile(String uid) {
         List<String> itemIds=profileMapper.getItemIdsByUID(uid);
         return itemClient.getItemsByListId(itemIds);

@@ -118,8 +118,10 @@ public class businessController {
     * @update: 2022/7/5
     */
     @PostMapping("/business/cart/{itemId}")
-    public ResponseResult addItemToCart(@RequestHeader("uid") String uid,@PathVariable("itemId") String itemId,@RequestParam int num,@RequestParam int days){
-        Boolean res = businessService.addCart(uid,itemId,num,days);
+    public ResponseResult addItemToCart(@RequestHeader("uid") String uid,@PathVariable("itemId") String itemId,@RequestParam String num,@RequestParam String days){
+        int num_int= Integer.parseInt(String.valueOf(num));
+        int days_int= Integer.parseInt(String.valueOf(days));
+        Boolean res = businessService.addCart(uid,itemId,num_int,days_int);
         System.out.println("添加购物车 res"+res);
         if(res) {
             return ResponseResult.success();
@@ -137,8 +139,10 @@ public class businessController {
     * @update: 2022/7/5
     */
     @PostMapping("/business/cart")
-    public ResponseResult updateCart(@RequestHeader("uid") String uid,@RequestParam String itemId, @RequestParam int num,@RequestParam int days){
-        Boolean res = businessService.updateCart(uid,itemId,num,days);
+    public ResponseResult updateCart(@RequestHeader("uid") String uid,@RequestParam String itemId, @RequestParam String num,@RequestParam String days){
+        int num_int= Integer.parseInt(String.valueOf(num));
+        int days_int= Integer.parseInt(String.valueOf(days));
+        Boolean res = businessService.updateCart(uid,itemId,num_int,days_int);
         System.out.println("更新购物车 res"+res);
         if(res) {
             return ResponseResult.success();
