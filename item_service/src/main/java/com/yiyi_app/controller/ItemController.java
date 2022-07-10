@@ -155,7 +155,8 @@ public class ItemController {
     * @create: 2022/7/4
     */
     @PostMapping("/items/item/getItemsByItemId")
-    public Item getItemsByItemId(@RequestParam("itemId") String itemId) {
+    public Item getItemsByItemId(@RequestParam String itemId) {
+        System.out.println("itemId"+itemId);
         return itemService.getItemByItemId(itemId);
     }
 

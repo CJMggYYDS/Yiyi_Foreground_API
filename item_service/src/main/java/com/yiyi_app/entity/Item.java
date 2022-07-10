@@ -1,5 +1,8 @@
 package com.yiyi_app.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +12,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class Item {
 
-    String itemid;
+    @TableId(value = "itemid",type = IdType.INPUT)
+    String itemId;
     String classify;
-    String itemname;
+    @TableField(value = "itemname")
+    String itemName;
     BigDecimal price;
     String url;
     Integer inventory;

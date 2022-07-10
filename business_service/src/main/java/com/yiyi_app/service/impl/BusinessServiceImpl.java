@@ -81,16 +81,16 @@ public class BusinessServiceImpl implements BusinessService {
         Cart cart1 = cartMapper.selectOne(cartQueryWrapper);
 
         Cart cart = new Cart();
-        cart.setUid(uid);
-        cart.setItemid(itemId);
-        cart.setNum(num);
-        cart.setDays(days);
-
+        cart1.setUid(uid);
+        cart1.setItemid(itemId);
+        cart1.setNum(num);
+        cart1.setDays(days);
+        System.out.println("uid:"+uid+"itemId:"+itemId+"num:"+num+"days:"+days);
         UpdateWrapper<Cart> cartUpdateWrapper = new UpdateWrapper<>();
         cartUpdateWrapper.eq("uid",uid);
         cartUpdateWrapper.eq("itemId",itemId);
 
-        return cartMapper.update(cart,cartUpdateWrapper) > 0;
+        return cartMapper.update(cart1,cartUpdateWrapper) > 0;
     }
 
     @Override
