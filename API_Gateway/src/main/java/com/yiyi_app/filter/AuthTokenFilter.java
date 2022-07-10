@@ -37,7 +37,7 @@ public class AuthTokenFilter implements GlobalFilter, Ordered {
         String uri = serverHttpRequest.getURI().getPath();
 
         //检查白名单, 登录与注册请求直接放行,无需登录获取token校验
-        if(uri.contains("/api/auth/token") || uri.contains("/api/users/register") || uri.contains("/api/items/categories") || uri.contains("/api/items/search") || uri.contains("/api/items/classify") || uri.contains("/api/items/hotItems")) {
+        if(uri.contains("/api/auth/token") || uri.contains("/api/users/register") || uri.contains("/api/items/categories") || uri.contains("/api/items/search") || uri.contains("/api/items/classify") || uri.contains("/api/items/hotItems") || uri.contains("/api/users/check")) {
             return chain.filter(exchange);
         }
         //如果是浏览商品的请求，如果没有token也直接放行，有则将uid放入请求头中再放行

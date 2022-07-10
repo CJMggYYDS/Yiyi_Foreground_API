@@ -21,7 +21,7 @@ public class CORSConfiguration {
         // 配置跨域
         corsConfiguration.addAllowedHeader("*"); //允许携带任意请求头
         corsConfiguration.addAllowedMethod("*"); //允许所有方法
-        corsConfiguration.addAllowedOrigin("*"); //允许所有源
+        corsConfiguration.addAllowedOriginPattern("*"); //允许所有源
         corsConfiguration.setAllowCredentials(true);  //允许携带cookie
 
         source.registerCorsConfiguration("/**", corsConfiguration);
