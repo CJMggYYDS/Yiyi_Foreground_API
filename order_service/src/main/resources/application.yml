@@ -12,8 +12,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848  # nacos服务地址
-
+        server-addr: 1.14.166.148:8848 # nacos服务地址
+        ip: 42.193.160.47
+        port: 8606
+    sentinel:
+      transport:
+        dashboard: 1.14.166.148:8858
 logging:
   level:
     com.yiyi_app.mapper: debug

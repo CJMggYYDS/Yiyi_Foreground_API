@@ -48,11 +48,11 @@
         </dependency>
 
         <!-- 持久层框架MyBatis -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.2</version>
-        </dependency>
+        </dependency>-->
 
         <!-- lombok依赖, 简化实体类的开发-->
         <dependency>
@@ -127,7 +127,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.7.RELEASE</version>
                 <configuration>
-                    <mainClass>com.yiyi_app.AuthApplication</mainClass>
+                    <mainClass>com.yiyi_app.OrderApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

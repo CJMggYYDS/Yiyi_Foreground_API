@@ -69,6 +69,7 @@ public class OrderController {
      */
     @PostMapping("/orders/insertOrder")
     public boolean insertOrder(@RequestBody RentVO rentVO){
+        count=0;
         System.out.println(rentVO);
         System.out.println(rentVO.getItemList());
         System.out.println(rentVO.getItemList().size());
