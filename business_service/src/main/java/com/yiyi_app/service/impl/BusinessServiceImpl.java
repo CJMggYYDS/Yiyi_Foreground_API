@@ -51,15 +51,19 @@ public class BusinessServiceImpl implements BusinessService {
     public Boolean addCart(String uid, String itemId, int num, int days) {
         Cart cart = new Cart();
         cart.setUid(uid);
+        System.out.println("uid:"+uid);
         cart.setItemid(itemId);
+        System.out.println("itemId:"+itemId);
+        System.out.println("item:"+itemClient.getItemsByItemId(itemId));
         cart.setPrice(itemClient.getItemsByItemId(itemId).getPrice());
 
+        System.out.println("Price:"+itemClient.getItemsByItemId(itemId).getPrice());
         //获取当前日期
         LocalDate date = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String dateToday = date.format(formatter).trim().replaceAll("-", "");
+        System.out.println("dateToday"+dateToday);
         cart.setTimestamp(dateToday);
-
         cart.setNum(num);
         cart.setDays(days);
         System.out.println("insert cart:"+cart);
@@ -71,7 +75,9 @@ public class BusinessServiceImpl implements BusinessService {
     public Boolean updateCart(String uid, String itemId, int num, int days) {
         QueryWrapper<Cart> cartQueryWrapper = new QueryWrapper<>();
         cartQueryWrapper.eq("uid",uid);
+        System.out.println("uid:"+uid);
         cartQueryWrapper.eq("itemId",itemId);
+        System.out.println("itemId:"+itemId);
         Cart cart1 = cartMapper.selectOne(cartQueryWrapper);
 
         Cart cart = new Cart();
@@ -92,16 +98,30 @@ public class BusinessServiceImpl implements BusinessService {
         QueryWrapper<Cart> cartQueryWrapper = new QueryWrapper<>();
         cartQueryWrapper.eq("uid",Uid);
         List<Cart> cartList = cartMapper.selectList(cartQueryWrapper);
+        System.out.println("cartList"+cartList);
         List<CartVO> cartVOList = new ArrayList<>();
-        CartVO cartVO = new CartVO();
-        for (Cart cart : cartList) {
-            cartVO.setItem(itemClient.getItemsByItemId(cart.getItemid()));
+
+//        for (Cart cart : cartList) {
+//            cartVO.setItem(itemClient.getItemsByItemId(cart.getItemid()));
+//            cartVO.setUid(Uid);
+//            cartVO.setDays(cart.getDays());
+//            cartVO.setNum(cart.getNum());
+//            cartVO.setPrice(cart.getPrice());
+//            cartVO.setTimestamp(cart.getTimestamp());
+//            cartVOList.add(cartVO);
+//        }
+        for (int i = 0 ; i <cartList.size();i++){
+            CartVO cartVO = new CartVO();
+            cartVO.setItem(itemClient.getItemsByItemId(cartList.get(i).getItemid()));
+            System.out.println("Itemid"+i+","+cartList.get(i).getItemid());
+            System.out.println("Item"+i+","+itemClient.getItemsByItemId(cartList.get(i).getItemid()));
             cartVO.setUid(Uid);
-            cartVO.setDays(cart.getDays());
-            cartVO.setNum(cart.getNum());
-            cartVO.setPrice(cart.getPrice());
-            cartVO.setTimestamp(cart.getTimestamp());
+            cartVO.setDays(cartList.get(i).getDays());
+            cartVO.setNum(cartList.get(i).getNum());
+            cartVO.setPrice(cartList.get(i).getPrice());
+            cartVO.setTimestamp(cartList.get(i).getTimestamp());
             cartVOList.add(cartVO);
+            System.out.println("cartVOList "+ i +","+cartVOList);
         }
         return cartVOList;
     }

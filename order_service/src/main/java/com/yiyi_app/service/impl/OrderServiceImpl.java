@@ -11,6 +11,7 @@ import com.yiyi_app.service.OrderService;
 import com.yiyi_app.service.client.ItemClient;
 import com.yiyi_app.vo.ItemListVO;
 import com.yiyi_app.vo.OrderVO;
+import net.sf.jsqlparser.expression.OrderByClause;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     ItemClient itemClient;
 
-    public static String orderId;
+    public static int count;
 
     @Override
     public Boolean insertOrder(Orders orders) {
@@ -90,58 +91,64 @@ public class OrderServiceImpl implements OrderService {
     public Boolean deleteOrder(String uid, String orderId) {
         QueryWrapper<Orderlist> OrderlistQueryWrapper = new QueryWrapper<>();
         OrderlistQueryWrapper.eq("orderid",orderId);
-        Orderlist orderlist = orderlistMapper.selectOne(OrderlistQueryWrapper);
+        List<Orderlist> orderlist = orderlistMapper.selectList(OrderlistQueryWrapper);
 
         QueryWrapper<Orders> OrdersQueryWrapper = new QueryWrapper<>();
         OrdersQueryWrapper.eq("uid",uid);
         OrdersQueryWrapper.eq("orderid",orderId);
         Orders orders = ordersMapper.selectOne(OrdersQueryWrapper);
-
+        int deleteorderlistRes = orderlistMapper.delete(OrderlistQueryWrapper);
+        int deleteordersRes = ordersMapper.delete(OrdersQueryWrapper);
+        System.out.println("deleteorderlistRes:"+deleteorderlistRes+", deleteordersRes"+deleteordersRes);
+        boolean res = false;
+        if(deleteorderlistRes == orderlist.size() & deleteordersRes ==1)
+            res = true;
+        System.out.println(res);
         if (orderlist == null || orders ==null)
             return false;
         else
-            return ( orderlistMapper.delete(OrderlistQueryWrapper) & ordersMapper.delete(OrdersQueryWrapper)) !=0;
+            return res;
     }
 
     @Override
-    public List<OrderVO> getOrderByOrderId(String orderId) {
+    public OrderVO getOrderByOrderId(String orderId) {
         Orders orders = ordersMapper.selectById(orderId);
 
         QueryWrapper<Orderlist> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("orderid",orderId);
         List<Orderlist> orderlist = orderlistMapper.selectList(queryWrapper);
-        List<OrderVO> orderVOList = new ArrayList<>();
+        //List<OrderVO> orderVOList = new ArrayList<>();
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setStatus(orderlist.get(0).getOrderliststatus());
+        orderVO.setAddress(orders.getAddress());
+        orderVO.setUid(orders.getUid());
+        orderVO.setTimestamp(orders.getOrdertime());
 
+        List<ItemListVO> itemList = new ArrayList<>();
         for(int i=0;i<orderlist.size();i++){
-            OrderVO orderVO = new OrderVO();
-            orderVO.setOrderId(orderlist.get(i).getOrderid());
-            orderVO.setStatus(orderlist.get(i).getOrderliststatus());
-            orderVO.setAddress(orders.getAddress());
-            orderVO.setUid(orders.getUid());
-            orderVO.setTimestamp(orders.getOrdertime());
-
             ItemListVO itemListVO = new ItemListVO();
             Item item=itemClient.getItemsByItemId(orderlist.get(i).getItemid());
             itemListVO.setItem(item);
             itemListVO.setDays(orderlist.get(i).getDays());
             itemListVO.setStatus(orderlist.get(i).getOrderliststatus());
             itemListVO.setNum(orderlist.get(i).getNum());
-            List<ItemListVO> itemList = new ArrayList<>();
             itemList.add(itemListVO);
             orderVO.setItemList(itemList);
-            orderVOList.add(orderVO);
+            //orderVOList.add(orderVO);
         }
 
-        return orderVOList;
+        return orderVO;
     }
 
 
     @Override
-    public List<List<OrderVO>> getOrderByuid(String uid) {
+    public List<OrderVO> getOrderByuid(String uid) {
         QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid);
         List<Orders> orders = ordersMapper.selectList(queryWrapper);
-        List<List<OrderVO>> orderVOList = new ArrayList<>();
+        System.out.println("orders"+orders);
+        List<OrderVO> orderVOList = new ArrayList<>();
 
         for (Orders order : orders) {
             orderVOList.add(getOrderByOrderId(order.getOrderid()));

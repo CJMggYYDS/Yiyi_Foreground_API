@@ -167,7 +167,7 @@ public class OrderController {
     */
     @GetMapping("/order")
     public ResponseResult getOrder(@RequestHeader("uid") String uid){
-        List<List<OrderVO>> responseData = orderService.getOrderByuid(uid);
+        List<OrderVO> responseData = orderService.getOrderByuid(uid);
         if(responseData == null) {
             return ResponseResult.error();
         }
@@ -183,8 +183,8 @@ public class OrderController {
      * @create: 2022/7/4
      */
     @PostMapping("/users/order/getOrderByUid")
-    public List<List<OrderVO>> getOrderByUid(@RequestBody String uid){
-        List<List<OrderVO>> responseData = orderService.getOrderByuid(uid);
+    public List<OrderVO> getOrderByUid(@RequestBody String uid){
+        List<OrderVO> responseData = orderService.getOrderByuid(uid);
         return responseData;
     }
 
