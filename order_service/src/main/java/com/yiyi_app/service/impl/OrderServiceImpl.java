@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     @Resource
     ItemClient itemClient;
 
-    public static String orderId;
+    public static int count;
 
     @Override
     public Boolean insertOrder(Orders orders) {
@@ -91,17 +91,23 @@ public class OrderServiceImpl implements OrderService {
     public Boolean deleteOrder(String uid, String orderId) {
         QueryWrapper<Orderlist> OrderlistQueryWrapper = new QueryWrapper<>();
         OrderlistQueryWrapper.eq("orderid",orderId);
-        Orderlist orderlist = orderlistMapper.selectOne(OrderlistQueryWrapper);
+        List<Orderlist> orderlist = orderlistMapper.selectList(OrderlistQueryWrapper);
 
         QueryWrapper<Orders> OrdersQueryWrapper = new QueryWrapper<>();
         OrdersQueryWrapper.eq("uid",uid);
         OrdersQueryWrapper.eq("orderid",orderId);
         Orders orders = ordersMapper.selectOne(OrdersQueryWrapper);
-
+        int deleteorderlistRes = orderlistMapper.delete(OrderlistQueryWrapper);
+        int deleteordersRes = ordersMapper.delete(OrdersQueryWrapper);
+        System.out.println("deleteorderlistRes:"+deleteorderlistRes+", deleteordersRes"+deleteordersRes);
+        boolean res = false;
+        if(deleteorderlistRes == orderlist.size() & deleteordersRes ==1)
+            res = true;
+        System.out.println(res);
         if (orderlist == null || orders ==null)
             return false;
         else
-            return ( orderlistMapper.delete(OrderlistQueryWrapper) & ordersMapper.delete(OrdersQueryWrapper)) !=0;
+            return res;
     }
 
     @Override
