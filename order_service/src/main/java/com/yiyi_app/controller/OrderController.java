@@ -69,6 +69,7 @@ public class OrderController {
      */
     @PostMapping("/orders/insertOrder")
     public boolean insertOrder(@RequestBody RentVO rentVO){
+        count = 0 ;
         System.out.println(rentVO);
         System.out.println(rentVO.getItemList());
         System.out.println(rentVO.getItemList().size());
@@ -165,9 +166,8 @@ public class OrderController {
     * @create: 2022/7/4
     */
     @GetMapping("/order")
-    @ResponseBody
     public ResponseResult getOrder(@RequestHeader("uid") String uid){
-        List<OrderVO> responseData = orderService.getOrderByuid(uid);
+        List<List<OrderVO>> responseData = orderService.getOrderByuid(uid);
         if(responseData == null) {
             return ResponseResult.error();
         }
@@ -183,8 +183,8 @@ public class OrderController {
      * @create: 2022/7/4
      */
     @PostMapping("/users/order/getOrderByUid")
-    public List<OrderVO> getOrderByUid(@RequestHeader("uid") String uid){
-        List<OrderVO> responseData = orderService.getOrderByuid(uid);
+    public List<List<OrderVO>> getOrderByUid(@RequestBody String uid){
+        List<List<OrderVO>> responseData = orderService.getOrderByuid(uid);
         return responseData;
     }
 

@@ -104,39 +104,45 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderVO getOrderByOrderId(String orderId) {
+    public List<OrderVO> getOrderByOrderId(String orderId) {
         Orders orders = ordersMapper.selectById(orderId);
 
         QueryWrapper<Orderlist> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("orderid",orderId);
-        Orderlist orderlist = orderlistMapper.selectOne(queryWrapper);
+        List<Orderlist> orderlist = orderlistMapper.selectList(queryWrapper);
+        List<OrderVO> orderVOList = new ArrayList<>();
 
-        OrderVO orderVO = new OrderVO();
-        orderVO.setOrderId(orderlist.getOrderid());
-        orderVO.setStatus(orderlist.getOrderliststatus());
-        orderVO.setAddress(orders.getAddress());
-        orderVO.setUid(orders.getUid());
-        orderVO.setTimestamp(orders.getOrdertime());
+        for(int i=0;i<orderlist.size();i++){
+            OrderVO orderVO = new OrderVO();
+            orderVO.setOrderId(orderlist.get(i).getOrderid());
+            orderVO.setStatus(orderlist.get(i).getOrderliststatus());
+            orderVO.setAddress(orders.getAddress());
+            orderVO.setUid(orders.getUid());
+            orderVO.setTimestamp(orders.getOrdertime());
 
-        ItemListVO itemListVO = new ItemListVO();
-        Item item=itemClient.getItemByItemId(orderlist.getItemid());
-        itemListVO.setItem(item);
-        itemListVO.setDays(orderlist.getDays());
-        itemListVO.setStatus(orderlist.getOrderliststatus());
-        itemListVO.setNum(orderlist.getNum());
-        List<ItemListVO> itemList = new ArrayList<>();
-        itemList.add(itemListVO);
-        orderVO.setItemList(itemList);
-        return orderVO;
+            ItemListVO itemListVO = new ItemListVO();
+            Item item=itemClient.getItemsByItemId(orderlist.get(i).getItemid());
+            itemListVO.setItem(item);
+            itemListVO.setDays(orderlist.get(i).getDays());
+            itemListVO.setStatus(orderlist.get(i).getOrderliststatus());
+            itemListVO.setNum(orderlist.get(i).getNum());
+            List<ItemListVO> itemList = new ArrayList<>();
+            itemList.add(itemListVO);
+            orderVO.setItemList(itemList);
+            orderVOList.add(orderVO);
+        }
+
+        return orderVOList;
     }
 
 
     @Override
-    public List<OrderVO> getOrderByuid(String uid) {
+    public List<List<OrderVO>> getOrderByuid(String uid) {
         QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid);
         List<Orders> orders = ordersMapper.selectList(queryWrapper);
-        List<OrderVO> orderVOList = new ArrayList<>();
+        List<List<OrderVO>> orderVOList = new ArrayList<>();
+
         for (Orders order : orders) {
             orderVOList.add(getOrderByOrderId(order.getOrderid()));
         }

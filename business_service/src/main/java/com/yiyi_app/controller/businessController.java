@@ -54,6 +54,7 @@ public class businessController {
         RentVO rentVO = new RentVO();
         rentVO.setUid(uid);
         String orderID = UUID.randomUUID().toString().substring(1,7);
+        System.out.println("orderID"+orderID);
         rentVO.setOrderId(orderID);
         rentVO.setTimestamp(map.get("timestamp").toString());
         rentVO.setAddress(map.get("address").toString());
